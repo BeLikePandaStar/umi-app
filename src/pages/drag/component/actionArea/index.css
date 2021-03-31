@@ -1,0 +1,28 @@
+.actionWrap {
+  width: 40px;
+  height: auto;
+  position: absolute;
+  right: 60px;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+.l-button {
+  margin-bottom: 20px;
+}
+
+.l-formItemWrap {
+  width: 100%;
+  line-height: 32px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.formItem--left {
+  width: 50%;
+}
+
+.formItem--right {
+  width: 35%;
+}
