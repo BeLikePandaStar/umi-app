@@ -18,4 +18,5 @@
 /src/.umi-production
 /src/.umi-test
 /.env.local
+./idea
 ./idea/workspace.xml
