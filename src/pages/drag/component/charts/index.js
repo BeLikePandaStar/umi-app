@@ -1,25 +1,18 @@
 import React, {Component} from "react";
 import * as echarts from 'echarts';
 
-interface Props {
-  id: string,
-  option: any,
-  w: string | number,
-  h: string | number,
-}
-
 // 图表
-export default class Chart extends Component<Props, any> {
+export default class Chart extends Component {
   render() {
     const {id} = this.props;
     return <div style={{width: '100%', height: '100%'}} id={id}/>
   }
 
   componentDidMount() {
-    this.getChart()
+    this.getChart(false)
   }
 
-  componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<any>, snapshot?: any) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     const {option, w, h} = this.props;
     if (option !== prevProps.option || w !== prevProps.w || h !== prevProps.h) {
       console.log('reload')
@@ -27,9 +20,9 @@ export default class Chart extends Component<Props, any> {
     }
   }
 
-  getChart = (isReload?: boolean) => {
+  getChart = (isReload) => {
     const {id, option} = this.props;
-    const myChart = echarts.init(document.getElementById(id) as HTMLElement);
+    const myChart = echarts.init(document.getElementById(id));
     myChart.setOption(option);
     if (isReload) {
       myChart.resize()

@@ -10,22 +10,10 @@ const options = [
   {label: '调度专题', value: 'ddzt'}
 ];
 
-interface Props {
-  onDragStart: any,
-  onDragEnd: any,
-  isShow: boolean,
-  isEdit: boolean,
-  handleShopToggle: any,
-}
-
-interface State {
-
-}
-
 // 右侧工具条
-export default class ToolBar extends Component<Props, State> {
+export default class ToolBar extends Component {
   render() {
-    const {onDragStart, onDragEnd, handleShopToggle, isShow, isEdit} = this.props;
+    const {handleShopToggle, isShow, isEdit} = this.props;
     return (
       <div className={style['shopWrap']} style={isEdit ? {display: 'block'} : {display: 'none'}}>
         <Button
@@ -50,24 +38,24 @@ export default class ToolBar extends Component<Props, State> {
             <div className={style['toolBar__listWrap']}>
               <div className={style['model-1']}
                    draggable={true}
-                   onDragStart={(e) => onDragStart(e, {w: 2, h: 2, type: 'text'})}
-                   onDragEnd={(e) => onDragEnd(e)}>
+                   onDragStart={(e) => this.onDragStart(e, {w: 2, h: 2, type: 'text'})}
+                   onDragEnd={(e) => this.onDragEnd(e)}>
                 <p>
                   2*2-文本
                 </p>
               </div>
               <div className={style['model-1']}
                    draggable={true}
-                   onDragStart={(e) => onDragStart(e, {w: 2, h: 2, type: 'link'})}
-                   onDragEnd={(e) => onDragEnd(e)}>
+                   onDragStart={(e) => this.onDragStart(e, {w: 2, h: 2, type: 'link'})}
+                   onDragEnd={(e) => this.onDragEnd(e)}>
                 <p>
                   2*2-链接
                 </p>
               </div>
               <div className={style['model-1']}
                    draggable={true}
-                   onDragStart={(e) => onDragStart(e, {w: 3, h: 3, type: 'bar'})}
-                   onDragEnd={(e) => onDragEnd(e)}>
+                   onDragStart={(e) => this.onDragStart(e, {w: 3, h: 3, type: 'bar'})}
+                   onDragEnd={(e) => this.onDragEnd(e)}>
                 <p>
                   3*3-柱图
                 </p>
@@ -77,5 +65,16 @@ export default class ToolBar extends Component<Props, State> {
         </div>
       </div>
     )
+  }
+
+  // model
+  onDragStart = (e, params) => {
+    e.currentTarget.style.border = "dashed";
+    const i = new Date().getTime().toString();
+    e.dataTransfer.setData('text/plain', JSON.stringify({i, ...params}));
+  }
+
+  onDragEnd = (e) => {
+    e.currentTarget.style.border = '1px solid #dddddd';
   }
 }

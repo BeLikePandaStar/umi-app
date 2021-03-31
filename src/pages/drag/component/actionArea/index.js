@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import style from './index.css';
 import {Button, Modal, Form, Input, Select} from 'antd';
-import {EditOutlined, FileAddOutlined, SaveOutlined, RollbackOutlined, ShopOutlined} from '@ant-design/icons';
+import * as Icon from '@ant-design/icons';
 
+const {EditOutlined, FileAddOutlined, SaveOutlined, RollbackOutlined, ShopOutlined} = Icon;
 const FormItem = Form.Item;
 const options = Array.from({length: 13}, (value, key) => key + 4).map(item => ({label: item, value: item}));
 const validateMessages = {
@@ -11,15 +12,13 @@ const validateMessages = {
 
 
 // 右下角的操作栏
-export default class ActionArea extends Component<any, any> {
-  constructor(props: any) {
+export default class ActionArea extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       isModalShow: false
     }
   }
-
-  private modalFormEle = React.createRef<any>()
 
   render() {
     const {handleEdit, isEdit, handleSave, handleCancel, handleShopToggle} = this.props, {isModalShow} = this.state;
@@ -73,7 +72,7 @@ export default class ActionArea extends Component<any, any> {
           onCancel={() => this.setState({isModalShow: false})}
           onOk={this.handleOk}>
           <Form
-            ref={this.modalFormEle}
+            ref={ele => this.modalFormEle = ele}
             validateMessages={validateMessages}
             initialValues={{title: '', w: 4, h: 4}}>
             <FormItem label={'标题'} name={'title'} required={true} rules={[{required: true}]}>

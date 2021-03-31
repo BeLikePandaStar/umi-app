@@ -2,8 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75fc6d6f-485f-46b1-a26a-8bd4492f61a0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/action.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/action.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/actionArea/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/actionArea/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/charts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/charts/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/charts/option.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/charts/option.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/typings.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/typings.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +53,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/pages/drag/images" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -128,7 +138,8 @@
       <workItem from="1616977293581" duration="24594000" />
       <workItem from="1617064556156" duration="364000" />
       <workItem from="1617064968816" duration="12043000" />
-      <workItem from="1617151864224" duration="4075000" />
+      <workItem from="1617151864224" duration="11501000" />
+      <workItem from="1617171324930" duration="4228000" />
     </task>
     <servers />
   </component>
@@ -145,5 +156,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
