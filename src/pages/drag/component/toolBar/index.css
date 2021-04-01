@@ -10,7 +10,7 @@
   background: #edf1f3;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: auto;
   transition: all 0.5s;
 }
 
@@ -62,20 +62,41 @@
 
 .toolBar__listWrap {
   width: 100%;
-  overflow: hidden;
 }
 
+.panel__content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 
-.model-1 {
-  width: 80px;
-  height: 80px;
-  border: 1px solid #dddddd;
+.goodsItem {
+  width: 100px;
+  height: 128px;
+  background: #edf1f3;
+  margin: 16px;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.model-1 p {
-  flex: 1 1 auto;
-  line-height: 100%;
+.goodsItem p {
+  line-height: 30px;
+  color: #00c6ff;
+  font-size: 12px;
+  width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-align: center;
+}
+
+.goodsItem img {
+  width: 80px;
+  height: 80px;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }

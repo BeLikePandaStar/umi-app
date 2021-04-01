@@ -1,19 +1,24 @@
 import React, {Component} from 'react';
 import style from "./index.css";
-import {Select, Input, Button} from 'antd';
+import {Select, Input, Button, Collapse} from 'antd';
 import {AppstoreOutlined, SearchOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons';
+import {get_store_list} from "../../action";
 
-const options = [
-  {label: '全部应用磁贴', value: ''},
-  {label: '个人工作台', value: 'workbench'},
-  {label: '演示', value: 'zlproforce'},
-  {label: '调度专题', value: 'ddzt'}
-];
+const {Panel} = Collapse;
 
 // 右侧工具条
 export default class ToolBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      options: [],
+      data: []
+    }
+  }
+
   render() {
     const {handleShopToggle, isShow, isEdit} = this.props;
+    const {options} = this.state;
     return (
       <div className={style['shopWrap']} style={isEdit ? {display: 'block'} : {display: 'none'}}>
         <Button
@@ -36,30 +41,7 @@ export default class ToolBar extends Component {
                 suffix={<SearchOutlined/>}/>
             </div>
             <div className={style['toolBar__listWrap']}>
-              <div className={style['model-1']}
-                   draggable={true}
-                   onDragStart={(e) => this.onDragStart(e, {w: 2, h: 2, type: 'text'})}
-                   onDragEnd={(e) => this.onDragEnd(e)}>
-                <p>
-                  2*2-文本
-                </p>
-              </div>
-              <div className={style['model-1']}
-                   draggable={true}
-                   onDragStart={(e) => this.onDragStart(e, {w: 2, h: 2, type: 'link'})}
-                   onDragEnd={(e) => this.onDragEnd(e)}>
-                <p>
-                  2*2-链接
-                </p>
-              </div>
-              <div className={style['model-1']}
-                   draggable={true}
-                   onDragStart={(e) => this.onDragStart(e, {w: 3, h: 3, type: 'bar'})}
-                   onDragEnd={(e) => this.onDragEnd(e)}>
-                <p>
-                  3*3-柱图
-                </p>
-              </div>
+              {this.getCollapse()}
             </div>
           </div>
         </div>
@@ -67,14 +49,64 @@ export default class ToolBar extends Component {
     )
   }
 
+  componentDidMount() {
+    get_store_list().then(data => {
+      const options = data.map(item => ({label: item.title, value: item.id}));
+      options.unshift({label: '全部应用磁贴', value: ''});
+      this.setState({options, data})
+    })
+  }
+
+  // 获取磁贴折叠面板
+  getCollapse = () => {
+    const {data} = this.state;
+    return !!data.length ? (
+      <Collapse>
+        {
+          data.map(item => (
+            <Panel key={item.id} header={item.title}>
+              <div className={style['panel__content']}>
+                {
+                  item.children.map(child => {
+                    const {isSize, minW, maxW, minH, maxH} = JSON.parse(child.templateConfig);
+                    return (
+                      <div
+                        key={child.id}
+                        className={style['goodsItem']}
+                        draggable={true}
+                        onDragStart={(e) => this.onDragStart(e, {
+                          w: minW,
+                          h: minH,
+                          minW,
+                          maxW,
+                          minH,
+                          maxH,
+                          isResizable: isSize,
+                          type: child.templateTypeCode
+                        })}
+                        onDragEnd={(e) => this.onDragEnd(e)}>
+                        <p title={child.title}>{child.title}</p>
+                        <img src={(child.thumbnail)} alt=""/>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </Panel>
+          ))
+        }
+      </Collapse>
+    ) : []
+  }
+
   // model
   onDragStart = (e, params) => {
-    e.currentTarget.style.border = "dashed";
+    e.currentTarget.style.border = "2px dashed rgb(240, 194, 199)";
     const i = new Date().getTime().toString();
     e.dataTransfer.setData('text/plain', JSON.stringify({i, ...params}));
   }
 
   onDragEnd = (e) => {
-    e.currentTarget.style.border = '1px solid #dddddd';
+    e.currentTarget.style.border = 'none';
   }
 }

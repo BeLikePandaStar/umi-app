@@ -9,7 +9,7 @@ const FixedGridLayout = WidthProvider(GridLayout);
 const originalLayout = getFromLS("layout") || [];
 const originalMirrorLayout = getFromLS("mirrorLayout") || [];
 const siderWidth = Number(localStorage.getItem('siderWidth'));
-const rowHeight = (document.documentElement.clientWidth - siderWidth - 24) / 20;
+const rowHeight = (document.documentElement.clientWidth - siderWidth) / 30;
 
 export default class Content extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ export default class Content extends Component {
         measureBeforeMount={false}
         useCSSTransforms={true}
         compactType={"vertical"}
-        cols={20}
+        cols={30}
         rowHeight={rowHeight}>
         {this.getLayouts()}
       </FixedGridLayout>
@@ -59,7 +59,6 @@ export default class Content extends Component {
               <div
                 className={style['domMask']}
                 style={item.type === 'group' ? {width: '80%', height: 30, margin: 0} : {}}
-                onMouseDown={isEdit && item.type !== 'group' ? this.onDomMouseDown : undefined}
                 onMouseUp={isEdit && item.type !== 'group' ? (e) => this.onDomMouseUp(e, item) : undefined}/>
               <span className={style['delete']} onClick={() => this.handleDelete(item)}>{<CloseOutlined/>}</span>
             </>
@@ -151,19 +150,14 @@ export default class Content extends Component {
     )
   }
 
-  // 鼠标按下
-  onDomMouseDown = (e) => {
-    console.log(e.type)
-  }
-
-  // 外部元素拖拽近group事件
+  // 外部元素拖拽进group事件
   onDomMouseUp = (e, child) => {
     const {mirrorLayout} = this.state;
     const groups = mirrorLayout.filter((item) => item.type === 'group');
     if (!!groups.length) {
       groups.forEach((item) => {
-        const xMin = item.x * rowHeight + siderWidth + 12, xMax = xMin + item.w * rowHeight;
-        const yMin = item.y * rowHeight + 64 + 12, yMax = yMin + item.h * rowHeight;
+        const xMin = item.x * rowHeight + siderWidth + 10, xMax = xMin + item.w * rowHeight;
+        const yMin = item.y * rowHeight + 64 + 10, yMax = yMin + item.h * rowHeight;
 
         if (e.clientX > xMin && e.clientX < xMax && e.clientY > yMin && e.clientY < yMax) {
           const {mirrorLayout, layout} = this.state;
@@ -183,9 +177,10 @@ export default class Content extends Component {
     }
   }
 
+  // group内部元素往外拖的down事件
   onChildMouseDown = (e, item, father) => {
-    const xMin = father.x * rowHeight + siderWidth + 12, xMax = xMin + father.w * rowHeight;
-    const yMin = father.y * rowHeight + 64 + 12, yMax = yMin + father.h * rowHeight;
+    const xMin = father.x * rowHeight + siderWidth + 10, xMax = xMin + father.w * rowHeight;
+    const yMin = father.y * rowHeight + 64 + 10, yMax = yMin + father.h * rowHeight;
     const offsetX = e.nativeEvent.offsetX, offsetY = e.nativeEvent.offsetY;
 
     document.onmousemove = (e) => {
@@ -214,11 +209,13 @@ export default class Content extends Component {
     }
   }
 
-  // group内部元素往外拖拽事件
+  // 在group内部up事件
   onChildDomMouseUp = () => {
     document.onmousemove = null;
   }
 
+  // group内部元素往外拖拽事件
+  // ps:内部元素无法直接移出group,需要一个色块做承接;
   onSubMouseUp = (e, father) => {
     document.onmousemove = null;
     const sub = document.getElementById('substitute-' + father.i) || {style: {display: 'none'}};

@@ -2,18 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75fc6d6f-485f-46b1-a26a-8bd4492f61a0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/barChart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/lineChart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/link.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/pieChart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/tab.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/table.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/text.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/action.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/actionArea/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/actionArea/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/charts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/charts/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/charts/option.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/charts/option.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/typings.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/typings.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/action.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/charts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/charts/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,10 +31,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="CSS File" />
         <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -43,7 +48,9 @@
     <scope name="Git Scope" pattern="" />
   </component>
   <component name="ProjectId" id="1pgy5IMkRguZKpshtCrAdqs3n1P" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -139,7 +146,8 @@
       <workItem from="1617064556156" duration="364000" />
       <workItem from="1617064968816" duration="12043000" />
       <workItem from="1617151864224" duration="11501000" />
-      <workItem from="1617171324930" duration="4228000" />
+      <workItem from="1617171324930" duration="12377000" />
+      <workItem from="1617237923607" duration="16170000" />
     </task>
     <servers />
   </component>
