@@ -1,0 +1,25 @@
+.link__wrap {
+  width: calc(100% - 20%);
+  height: 100%;
+  margin: 0 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.link__wrap img {
+  width: 70%;
+}
+
+.link__wrap span {
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 24px;
+  color: #6d7172;
+  text-align: center;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

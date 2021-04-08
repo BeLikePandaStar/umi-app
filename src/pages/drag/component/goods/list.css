@@ -1,0 +1,9 @@
+.list__header {
+  width: 100%;
+}
+
+.list__header h2 {
+  text-indent: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
