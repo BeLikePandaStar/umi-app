@@ -2,23 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75fc6d6f-485f-46b1-a26a-8bd4492f61a0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/barChart.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/lineChart.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/link.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/pieChart.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/tab.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/table.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/drag/images/text.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.umirc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/.umirc.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layouts/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/charts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/charts/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/drag/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/drag.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,10 +22,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -64,7 +55,7 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="G:\umi-app\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -75,6 +66,7 @@
       <recent name="G:\umi-app\src\pages\drag" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\umi-app\src\models" />
       <recent name="G:\umi-app\src\pages\drag\component\actionArea" />
       <recent name="G:\umi-app\src\pages\drag\component\toolBar" />
       <recent name="G:\umi-app\src\component\breadCrumb" />
@@ -147,7 +139,14 @@
       <workItem from="1617064968816" duration="12043000" />
       <workItem from="1617151864224" duration="11501000" />
       <workItem from="1617171324930" duration="12377000" />
-      <workItem from="1617237923607" duration="16170000" />
+      <workItem from="1617237923607" duration="21285000" />
+      <workItem from="1617324446054" duration="13656000" />
+      <workItem from="1617349483597" duration="2530000" />
+      <workItem from="1617352050493" duration="2132000" />
+      <workItem from="1617670490089" duration="3530000" />
+      <workItem from="1617755855379" duration="33000" />
+      <workItem from="1617845064697" duration="2791000" />
+      <workItem from="1617847950612" duration="806000" />
     </task>
     <servers />
   </component>

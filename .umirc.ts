@@ -1,5 +1,5 @@
-import {defineConfig} from 'umi';
-import {config} from './config/config';
+import { defineConfig } from 'umi';
+import { config } from './config/config';
 import routes from './routes';
 
 export default defineConfig({
@@ -8,10 +8,12 @@ export default defineConfig({
     type: 'none',
   },
   hash: true,
-  history: {type: 'hash'},
+  history: { type: 'hash' },
   routes,
   fastRefresh: {},
   devServer: {
-    port: 8000
+    port: 8000,
   },
+  dva: {},
+  antd: {},
 });
