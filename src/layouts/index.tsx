@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'umi';
 import { Layout, Menu, Button } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
@@ -8,66 +9,39 @@ const { SubMenu } = Menu,
   MenuItem = Menu.Item;
 const { Header, Content, Sider } = Layout;
 
-const menuData = [
-  {
-    id: '100',
-    order: 1,
-    name: '自定义一级菜单',
-    url: '/menu1',
-    children: [
-      {
-        id: '110',
-        order: 1,
-        name: '拖拽模块',
-        url: '/menu2',
-        children: [{ id: '111', order: 1, name: '拖拽', url: '/drag' }],
-      },
-      {
-        id: '120',
-        order: 2,
-        name: '动态表单模块',
-        url: '/menu2',
-        children: [{ id: '121', order: 1, name: '动态表单', url: '/form' }],
-      },
-    ],
-  },
-  {
-    id: '200',
-    order: 2,
-    name: '自定义一级菜单2',
-    url: '/menu1',
-    children: [
-      { id: '210', order: 1, name: '拖拽模块', url: '/drag', children: null },
-    ],
-  },
-];
-
 interface Props {
-  routes: any;
+  menuData: any[];
+  subMenus: any[];
+  curFatherKeys: string[];
+  curSonKeys: string[];
+  curGrandsonKeys: string[];
+  getMenuList: any;
+  handleMenuItemClick: any;
 }
 
 interface State {
-  menus: any;
-  subMenus: any;
-  openKey: string;
-  selectKey: string;
   sideMenuHidden: boolean;
 }
 
-export default class Index extends Component<Props, State> {
+class Index extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      menus: [],
-      subMenus: [],
-      openKey: '',
-      selectKey: '',
       sideMenuHidden: false,
     };
   }
 
   render() {
-    const { menus, subMenus, openKey, selectKey, sideMenuHidden } = this.state;
+    const {
+      menuData = [],
+      subMenus = [],
+      curFatherKeys = [],
+      curSonKeys = [],
+      curGrandsonKeys = [],
+      handleMenuItemClick,
+    } = this.props;
+    console.log(menuData, subMenus);
+    const { sideMenuHidden } = this.state;
     return (
       <Layout className={'wrap'}>
         <Header className="header">
@@ -75,17 +49,21 @@ export default class Index extends Component<Props, State> {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={[menuData[0]['id']]}
+            defaultSelectedKeys={curFatherKeys}
+            selectedKeys={curFatherKeys}
           >
-            {!!menus.length &&
-              menus.map((item: any) => (
-                <MenuItem
-                  key={item.id}
-                  onClick={() => this.handleMenuClick(item.id)}
-                >
-                  {item.name}
-                </MenuItem>
-              ))}
+            {menuData.length
+              ? menuData.map((item: any) => {
+                  return (
+                    <MenuItem
+                      key={item.id}
+                      onClick={() => handleMenuItemClick(item.url)}
+                    >
+                      {item.name}
+                    </MenuItem>
+                  );
+                })
+              : null}
           </Menu>
         </Header>
         <Layout>
@@ -96,38 +74,38 @@ export default class Index extends Component<Props, State> {
             defaultCollapsed={false}
             collapsed={sideMenuHidden}
           >
-            {selectKey && (
-              <Menu
-                mode="inline"
-                defaultSelectedKeys={[selectKey]}
-                defaultOpenKeys={[openKey]}
-                style={{ height: '100%', borderRight: 0 }}
-              >
-                {subMenus && subMenus.length
-                  ? subMenus.map((item: any) => {
-                      if (item.children && item.children.length) {
-                        return (
-                          <SubMenu key={item.id} title={item.name}>
-                            {item.children.map((subItem: any) => (
-                              <MenuItem key={subItem.id}>
-                                <Link to={subItem.url || subItem.path}>
-                                  {subItem.name}
-                                </Link>
-                              </MenuItem>
-                            ))}
-                          </SubMenu>
-                        );
-                      } else {
-                        return (
-                          <MenuItem key={item.id}>
-                            <Link to={item.url || item.path}>{item.name}</Link>
-                          </MenuItem>
-                        );
-                      }
-                    })
-                  : null}
-              </Menu>
-            )}
+            <Menu
+              mode="inline"
+              defaultOpenKeys={curSonKeys}
+              openKeys={curSonKeys}
+              defaultSelectedKeys={curGrandsonKeys}
+              selectedKeys={curGrandsonKeys}
+              style={{ height: '100%', borderRight: 0 }}
+            >
+              {subMenus && subMenus.length
+                ? subMenus.map((item: any) => {
+                    if (item.children && item.children.length) {
+                      return (
+                        <SubMenu key={item.id} title={item.name}>
+                          {item.children.map((subItem: any) => (
+                            <MenuItem key={subItem.id}>
+                              <Link to={subItem.url || subItem.path}>
+                                {subItem.name}
+                              </Link>
+                            </MenuItem>
+                          ))}
+                        </SubMenu>
+                      );
+                    } else {
+                      return (
+                        <MenuItem key={item.id}>
+                          <Link to={item.url || item.path}>{item.name}</Link>
+                        </MenuItem>
+                      );
+                    }
+                  })
+                : null}
+            </Menu>
             <Button
               className={'fold'}
               type={'primary'}
@@ -153,30 +131,9 @@ export default class Index extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.setState({ menus: menuData }, () =>
-      this.handleMenuClick(menuData[0]['id']),
-    );
+    this.props.getMenuList();
     localStorage.setItem('siderWidth', '200');
   }
-
-  handleMenuClick = (current: string) => {
-    const { menus } = this.state;
-    const subMenus = menus.filter((item: any) => item.id === current)[0]
-      ? menus.filter((item: any) => item.id === current)[0]['children']
-      : [];
-    const openKey = !!subMenus.length
-      ? subMenus[0] && subMenus[0]['children']
-        ? subMenus[0]['id']
-        : ''
-      : '';
-    const selectKey = !!subMenus.length
-      ? subMenus[0] && subMenus[0]['children']
-        ? subMenus[0]['children'][0]['id']
-        : subMenus[0]['id']
-      : '';
-
-    this.setState({ subMenus, openKey, selectKey, sideMenuHidden: false });
-  };
 
   handleToggle = () => {
     this.setState({ sideMenuHidden: !this.state.sideMenuHidden }, () => {
@@ -187,3 +144,18 @@ export default class Index extends Component<Props, State> {
     });
   };
 }
+
+const mapStateToProps = (state: any) => state.layouts;
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    getMenuList: (payload: any) => {
+      dispatch({ type: 'layouts/getMenuList', payload });
+    },
+    handleMenuItemClick: (payload: any) => {
+      dispatch({ type: 'layouts/change', payload });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

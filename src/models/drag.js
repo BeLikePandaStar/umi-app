@@ -49,7 +49,7 @@ const get_store_list = (params = {}) => {
           title: '链接',
           templateTypeCode: 'link',
           templateConfig:
-            '{"isSize":false,"maxW":64,"maxH":40,"minW":2,"minH":2}',
+            '{"isSize":false,"maxW":2,"maxH":2,"minW":2,"minH":2}',
           thumbnail: require('../pages/drag/images/link.png'),
           data: {
             title: '表单页面',

@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="75fc6d6f-485f-46b1-a26a-8bd4492f61a0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.umirc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/.umirc.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layouts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/drag.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/drag.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/drag.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" afterDir="false" />
     </list>
@@ -23,9 +20,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="TypeScript JSX File" />
-        <option value="TypeScript File" />
         <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -146,12 +143,23 @@
       <workItem from="1617670490089" duration="3530000" />
       <workItem from="1617755855379" duration="33000" />
       <workItem from="1617845064697" duration="2791000" />
-      <workItem from="1617847950612" duration="806000" />
+      <workItem from="1617847950612" duration="10904000" />
+      <workItem from="1617929050870" duration="12999000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
