@@ -17,6 +17,7 @@ interface Props {
   curGrandsonKeys: string[];
   getMenuList: any;
   handleMenuItemClick: any;
+  getSubMenu: any;
 }
 
 interface State {
@@ -39,6 +40,7 @@ class Index extends Component<Props, State> {
       curSonKeys = [],
       curGrandsonKeys = [],
       handleMenuItemClick,
+      getSubMenu,
     } = this.props;
     console.log(menuData, subMenus);
     const { sideMenuHidden } = this.state;
@@ -57,7 +59,7 @@ class Index extends Component<Props, State> {
                   return (
                     <MenuItem
                       key={item.id}
-                      onClick={() => handleMenuItemClick(item.url)}
+                      onClick={() => getSubMenu({ id: item.id })}
                     >
                       {item.name}
                     </MenuItem>
@@ -79,7 +81,9 @@ class Index extends Component<Props, State> {
               defaultOpenKeys={curSonKeys}
               openKeys={curSonKeys}
               defaultSelectedKeys={curGrandsonKeys}
-              selectedKeys={curGrandsonKeys}
+              selectedKeys={
+                curGrandsonKeys.length ? curGrandsonKeys : curSonKeys
+              }
               style={{ height: '100%', borderRight: 0 }}
             >
               {subMenus && subMenus.length
@@ -154,6 +158,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     handleMenuItemClick: (payload: any) => {
       dispatch({ type: 'layouts/change', payload });
+    },
+    getSubMenu: (payload: any) => {
+      dispatch({ type: 'layouts/getSubMenu', payload });
     },
   };
 };

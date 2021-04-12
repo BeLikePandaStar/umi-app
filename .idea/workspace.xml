@@ -4,9 +4,7 @@
     <list default="true" id="75fc6d6f-485f-46b1-a26a-8bd4492f61a0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layouts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/drag.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/drag.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/content/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/drag/component/toolBar/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/layouts.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/layouts.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +51,7 @@
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-    <property name="ts.external.directory.path" value="G:\umi-app\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -145,6 +143,8 @@
       <workItem from="1617845064697" duration="2791000" />
       <workItem from="1617847950612" duration="10904000" />
       <workItem from="1617929050870" duration="12999000" />
+      <workItem from="1618195291695" duration="789000" />
+      <workItem from="1618196112225" duration="4469000" />
     </task>
     <servers />
   </component>

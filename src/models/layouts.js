@@ -139,12 +139,31 @@ export default {
         curGrandsonKeys: keys.length ? [keys[0]['grandsonId']] : [''],
       };
     },
+    getSubMenu: (
+      { menuData, filterMenuData },
+      { payload: { id: curFatherId } },
+    ) => {
+      const curFather =
+        menuData.filter((father) => father.id === curFatherId)[0] || null;
+      const curSon =
+        curFather && curFather.children ? curFather['children'][0] : null;
+      const curGrandson =
+        curSon && curSon.children ? curSon['children'][0] : null;
+      return {
+        menuData,
+        filterMenuData,
+        subMenus: curFather ? curFather.children : [],
+        curFatherKeys: curFather ? [curFather.id] : [],
+        curSonKeys: curSon ? [curSon.id] : [],
+        curGrandsonKeys: curGrandson ? [curGrandson.id] : [],
+      };
+    },
   },
   subscriptions: {
-    onRouterChange: ({ dispatch, history }) => {
-      return history.listen(({ pathname }) => {
-        dispatch({ type: 'change', payload: { curPath: pathname } });
+    /*onRouterChange: ({dispatch, history}) => {
+      return history.listen(({pathname}) => {
+        dispatch({type: 'change', payload: {curPath: pathname}});
       });
-    },
+    },*/
   },
 };
