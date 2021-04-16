@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'umi';
+import { connect, history } from 'umi';
 import { Layout, Menu, Button } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Link } from 'umi';
@@ -15,9 +15,9 @@ interface Props {
   curFatherKeys: string[];
   curSonKeys: string[];
   curGrandsonKeys: string[];
-  getMenuList: any;
   handleMenuItemClick: any;
   getSubMenu: any;
+  openSubMenu: any;
 }
 
 interface State {
@@ -34,20 +34,21 @@ class Index extends Component<Props, State> {
 
   render() {
     const {
-      menuData = [],
-      subMenus = [],
-      curFatherKeys = [],
-      curSonKeys = [],
-      curGrandsonKeys = [],
-      handleMenuItemClick,
+      menuData,
+      subMenus,
+      curFatherKeys,
+      curSonKeys,
+      curGrandsonKeys,
       getSubMenu,
+      openSubMenu,
     } = this.props;
-    console.log(menuData, subMenus);
     const { sideMenuHidden } = this.state;
     return (
       <Layout className={'wrap'}>
         <Header className="header">
+          {/*Logo*/}
           <div className="logo">Logo</div>
+          {/*一级菜单*/}
           <Menu
             theme="dark"
             mode="horizontal"
@@ -55,25 +56,23 @@ class Index extends Component<Props, State> {
             selectedKeys={curFatherKeys}
           >
             {menuData.length
-              ? menuData.map((item: any) => {
-                  return (
-                    <MenuItem
-                      key={item.id}
-                      onClick={() => getSubMenu({ id: item.id })}
-                    >
-                      {item.name}
-                    </MenuItem>
-                  );
-                })
+              ? menuData.map((item: any) => (
+                  <MenuItem
+                    key={item.id}
+                    onClick={() => getSubMenu({ id: item.id })}
+                  >
+                    {item.name}
+                  </MenuItem>
+                ))
               : null}
           </Menu>
         </Header>
         <Layout>
+          {/*侧边菜单栏*/}
           <Sider
             width={200}
             className="site-layout-background"
             collapsedWidth={0}
-            defaultCollapsed={false}
             collapsed={sideMenuHidden}
           >
             <Menu
@@ -82,7 +81,9 @@ class Index extends Component<Props, State> {
               openKeys={curSonKeys}
               defaultSelectedKeys={curGrandsonKeys}
               selectedKeys={
-                curGrandsonKeys.length ? curGrandsonKeys : curSonKeys
+                curGrandsonKeys && curGrandsonKeys[0]
+                  ? curGrandsonKeys
+                  : curSonKeys
               }
               style={{ height: '100%', borderRight: 0 }}
             >
@@ -90,7 +91,11 @@ class Index extends Component<Props, State> {
                 ? subMenus.map((item: any) => {
                     if (item.children && item.children.length) {
                       return (
-                        <SubMenu key={item.id} title={item.name}>
+                        <SubMenu
+                          key={item.id}
+                          title={item.name}
+                          onTitleClick={() => openSubMenu({ id: item.id })}
+                        >
                           {item.children.map((subItem: any) => (
                             <MenuItem key={subItem.id}>
                               <Link to={subItem.url || subItem.path}>
@@ -110,22 +115,19 @@ class Index extends Component<Props, State> {
                   })
                 : null}
             </Menu>
+            {/*折叠按钮*/}
             <Button
               className={'fold'}
               type={'primary'}
               onClick={this.handleToggle}
-              icon={
-                sideMenuHidden ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-              }
-            />
+            >
+              {sideMenuHidden ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            </Button>
           </Sider>
+          {/*正文区域*/}
           <Content
             className="site-layout-background"
-            style={{
-              padding: 0,
-              margin: 0,
-              minHeight: 280,
-            }}
+            style={{ padding: 0, margin: 0, minHeight: 280 }}
           >
             {this.props.children}
           </Content>
@@ -135,10 +137,14 @@ class Index extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.getMenuList();
     localStorage.setItem('siderWidth', '200');
   }
 
+  componentWillUnmount() {
+    localStorage.clear();
+  }
+
+  // 显示|隐藏侧边菜单
   handleToggle = () => {
     this.setState({ sideMenuHidden: !this.state.sideMenuHidden }, () => {
       localStorage.setItem(
@@ -153,14 +159,11 @@ const mapStateToProps = (state: any) => state.layouts;
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    getMenuList: (payload: any) => {
-      dispatch({ type: 'layouts/getMenuList', payload });
-    },
-    handleMenuItemClick: (payload: any) => {
-      dispatch({ type: 'layouts/change', payload });
-    },
     getSubMenu: (payload: any) => {
       dispatch({ type: 'layouts/getSubMenu', payload });
+    },
+    openSubMenu: (payload: any) => {
+      dispatch({ type: 'layouts/openSubMenu', payload });
     },
   };
 };

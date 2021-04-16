@@ -34,9 +34,7 @@ const get_menu_list = (params = {}) => {
       order: 2,
       name: '自定义一级菜单2',
       url: '/father2',
-      children: [
-        { id: '210', order: 1, name: '拖拽模块', url: '/drag', children: null },
-      ],
+      children: [{ id: '210', order: 1, name: '另一个页面', url: '/another' }],
     },
   ];
   return commonRequest('', params, 'get', menuData).then((res) => {
@@ -109,7 +107,13 @@ export default {
     },
   },
   reducers: {
+    // 初始化菜单
     save: (state, { payload: { menuData, filterMenuData } }) => {
+      // 请求到的菜单缓存起来
+      localStorage.setItem(
+        'menuObj',
+        JSON.stringify({ menuData, filterMenuData }),
+      );
       const curFather = menuData && menuData.length ? menuData[0] : null;
       const curSon =
         curFather && curFather.children ? curFather['children'][0] : null;
@@ -124,12 +128,53 @@ export default {
         curGrandsonKeys: [curGrandson ? curGrandson.id : ''],
       };
     },
-    change: ({ menuData, filterMenuData }, { payload: { curPath } }) => {
+    // 获取当前一级菜单下的二级和三级菜单
+    getSubMenu: (
+      { menuData, filterMenuData },
+      { payload: { id: curFatherId } },
+    ) => {
+      const curFather =
+        menuData.filter((father) => father.id === curFatherId)[0] || null;
+      return {
+        menuData,
+        filterMenuData,
+        subMenus: curFather ? curFather.children : [],
+        curFatherKeys: [],
+        curSonKeys: [],
+        curGrandsonKeys: [],
+      };
+    },
+    // 点击二级菜单的action
+    openSubMenu: (state, { payload: { id: curSonId } }) => {
+      const {
+        menuData,
+        filterMenuData,
+        subMenus,
+        curFatherKeys,
+        curSonKeys,
+        curGrandsonKeys,
+      } = state;
+      let newCurSonKeys = curSonKeys;
+      if (curSonKeys.includes(curSonId)) {
+        newCurSonKeys = newCurSonKeys.filter((item) => item !== curSonId);
+      } else {
+        newCurSonKeys.push(curSonId);
+      }
+      return {
+        menuData,
+        filterMenuData,
+        subMenus,
+        curFatherKeys,
+        curSonKeys: newCurSonKeys,
+        curGrandsonKeys,
+      };
+    },
+    // 当路由发生变化时触发的action
+    onChange: (state, { payload: { curPath, menuData, filterMenuData } }) => {
       const keys = filterMenuData.filter((item) => item.url === curPath);
       const fatherMenu = keys.length
         ? menuData.filter((item) => item.id === keys[0]['fatherId'])
         : [];
-      console.log(keys, fatherMenu, 'fatherMenu');
       return {
         menuData,
         filterMenuData,
@@ -139,31 +184,24 @@ export default {
         curGrandsonKeys: keys.length ? [keys[0]['grandsonId']] : [''],
       };
     },
-    getSubMenu: (
-      { menuData, filterMenuData },
-      { payload: { id: curFatherId } },
-    ) => {
-      const curFather =
-        menuData.filter((father) => father.id === curFatherId)[0] || null;
-      const curSon =
-        curFather && curFather.children ? curFather['children'][0] : null;
-      const curGrandson =
-        curSon && curSon.children ? curSon['children'][0] : null;
-      return {
-        menuData,
-        filterMenuData,
-        subMenus: curFather ? curFather.children : [],
-        curFatherKeys: curFather ? [curFather.id] : [],
-        curSonKeys: curSon ? [curSon.id] : [],
-        curGrandsonKeys: curGrandson ? [curGrandson.id] : [],
-      };
-    },
   },
   subscriptions: {
-    /*onRouterChange: ({dispatch, history}) => {
-      return history.listen(({pathname}) => {
-        dispatch({type: 'change', payload: {curPath: pathname}});
+    // 监听路由变化,保证菜单显示正确以及路由锁定
+    onRouterChange: ({ dispatch, history }) => {
+      return history.listen(({ pathname }) => {
+        // 如果菜单有缓存的话就取缓存的菜单
+        const menuObj = localStorage.getItem('menuObj')
+          ? JSON.parse(localStorage.getItem('menuObj'))
+          : null;
+        if (menuObj) {
+          dispatch({
+            type: 'onChange',
+            payload: { curPath: pathname, ...menuObj },
+          });
+        } else {
+          dispatch({ type: 'getMenuList', payload: {} });
+        }
       });
-    },*/
+    },
   },
 };
