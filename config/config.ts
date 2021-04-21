@@ -1,9 +1,3 @@
-import {defineConfig} from "umi";
+import { defineConfig } from 'umi';
 
-export const config = defineConfig({
-  layout: {
-    name: 'Ant Design',
-    locale: true,
-    layout: 'side'
-  }
-})
+export const config = defineConfig({});

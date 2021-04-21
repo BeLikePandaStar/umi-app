@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import style from './index.css';
 import { Button, message, Tooltip } from 'antd';
 import { CloseOutlined, SwapOutlined } from '@ant-design/icons';
-import GridLayout, { WidthProvider } from 'react-grid-layout';
+import GridLayout from 'react-grid-layout';
 import { Chart, getBarOption } from '../index';
 import { ListComponent, TextComponent, LinkComponent } from '../goods/index';
 
-const FixedGridLayout = WidthProvider(GridLayout);
+const siderWidth = Number(localStorage.getItem('siderWidth'));
+const topBarHeight = 64;
 const originalLayout = getFromLS('layout') || [];
 const originalMirrorLayout = getFromLS('mirrorLayout') || [];
-const siderWidth = Number(localStorage.getItem('siderWidth'));
-const rowHeight = (document.documentElement.clientWidth - siderWidth) / 30;
+const contentWidth = document.documentElement.offsetWidth - siderWidth;
+const rowHeight = contentWidth / 30;
 
 export default class Content extends Component {
   constructor(props) {
@@ -25,10 +26,10 @@ export default class Content extends Component {
   render() {
     const { layout } = this.state,
       { isEdit } = this.props;
-    // console.log(layout, this.state.mirrorLayout, 'lay')
     return (
-      <FixedGridLayout
+      <GridLayout
         {...this.props}
+        width={contentWidth}
         className={style['grid-layout']}
         layout={layout}
         isDroppable={isEdit}
@@ -38,10 +39,12 @@ export default class Content extends Component {
         useCSSTransforms={true}
         compactType={'vertical'}
         cols={30}
+        margin={[0, 0]}
+        containerPadding={[10, 10]}
         rowHeight={rowHeight}
       >
         {this.getLayouts()}
-      </FixedGridLayout>
+      </GridLayout>
     );
   }
 
@@ -59,31 +62,33 @@ export default class Content extends Component {
           }
 
           return (
-            <div key={item.i} className={style['domWrap']}>
-              {isEdit ? (
-                <>
-                  <div
-                    className={style['domMask']}
-                    style={
-                      item.type === 'group'
-                        ? { width: '80%', height: 30, margin: 0 }
-                        : {}
-                    }
-                    onMouseUp={
-                      isEdit && item.type !== 'group'
-                        ? (e) => this.onDomMouseUp(e, item)
-                        : undefined
-                    }
-                  />
-                  <span
-                    className={style['delete']}
-                    onClick={() => this.handleDelete(item)}
-                  >
-                    {<CloseOutlined />}
-                  </span>
-                </>
-              ) : null}
-              {this.getDom(item, item.children, children)}
+            <div
+              key={item.i}
+              className={style['domWrap']}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {isEdit && (
+                <span
+                  className={style['delete']}
+                  onClick={(e) => this.handleDelete(e, item)}
+                >
+                  {<CloseOutlined />}
+                </span>
+              )}
+              {isEdit && (
+                <div
+                  className={style['domMask']}
+                  style={item.type === 'group' ? { height: 20 } : {}}
+                  onMouseUp={
+                    item.type !== 'group'
+                      ? (e) => this.onDomMouseUp(e, item)
+                      : undefined
+                  }
+                />
+              )}
+              <div className={style['domContent']}>
+                {this.getDom(item, item.children, children)}
+              </div>
             </div>
           );
         })
@@ -102,10 +107,15 @@ export default class Content extends Component {
               {isEdit && (
                 <Tooltip
                   title={'点击切换分组及其子级的状态'}
-                  defaultVisible={true}
+                  defaultVisible={false}
                 >
                   <Button
-                    style={{ float: 'right', marginTop: 3, marginRight: 10 }}
+                    style={{
+                      float: 'right',
+                      marginTop: 3,
+                      marginRight: 10,
+                      zIndex: 100,
+                    }}
                     type={'default'}
                     size={'small'}
                     shape={'circle'}
@@ -115,7 +125,7 @@ export default class Content extends Component {
                 </Tooltip>
               )}
             </h2>
-            <FixedGridLayout
+            <GridLayout
               {...this.props}
               className={style['grid-layout--group']}
               layout={layout}
@@ -129,11 +139,14 @@ export default class Content extends Component {
               measureBeforeMount={false}
               useCSSTransforms={true}
               compactType={'vertical'}
+              width={rowHeight * item.w}
               cols={item.w}
+              margin={[0, 0]}
+              containerPadding={[10, 10]}
               rowHeight={rowHeight}
             >
               {children}
-            </FixedGridLayout>
+            </GridLayout>
             <div
               id={'substitute-' + item.i}
               className={style['substitute']}
@@ -195,7 +208,7 @@ export default class Content extends Component {
             </span>
           </>
         ) : null}
-        {dom}
+        <div className={style['domContent']}>{dom}</div>
       </div>
     );
   };
@@ -206,10 +219,10 @@ export default class Content extends Component {
     const groups = mirrorLayout.filter((item) => item.type === 'group');
     if (!!groups.length) {
       groups.forEach((item) => {
-        const xMin = item.x * rowHeight + siderWidth + 10,
-          xMax = xMin + item.w * rowHeight;
-        const yMin = item.y * rowHeight + 64 + 10,
-          yMax = yMin + item.h * rowHeight;
+        const xMin = siderWidth + 10 + item.x * rowHeight + 5, // 距屏幕的左边距 = 侧边栏宽度 + containerPadding + x + margin
+          xMax = xMin + item.w * rowHeight - 10;
+        const yMin = topBarHeight + 10 + item.y * rowHeight + 5,
+          yMax = yMin + item.h * rowHeight - 10;
 
         if (
           e.clientX > xMin &&
@@ -250,10 +263,10 @@ export default class Content extends Component {
 
   // group内部元素往外拖的down事件
   onChildMouseDown = (e, item, father) => {
-    const xMin = father.x * rowHeight + siderWidth + 10,
-      xMax = xMin + father.w * rowHeight;
-    const yMin = father.y * rowHeight + 64 + 10,
-      yMax = yMin + father.h * rowHeight;
+    const xMin = siderWidth + 10 + father.x * rowHeight + 5,
+      xMax = xMin + father.w * rowHeight - 10;
+    const yMin = topBarHeight + 10 + father.y * rowHeight + 5,
+      yMax = yMin + father.h * rowHeight - 10;
     const offsetX = e.nativeEvent.offsetX,
       offsetY = e.nativeEvent.offsetY;
 
@@ -273,8 +286,8 @@ export default class Content extends Component {
         e.clientY < yMin ||
         e.clientY > yMax
       ) {
-        const left = e.clientX - xMin - offsetX,
-          top = e.clientY - yMin - offsetY;
+        const left = e.clientX - xMin - offsetX - 10,
+          top = e.clientY - yMin - offsetY - 10;
         sub.style.display = 'block';
         sub.style.width = item.w * rowHeight + 'px';
         sub.style.height = item.h * rowHeight + 'px';
@@ -326,8 +339,8 @@ export default class Content extends Component {
         item.static = !item.static;
         !!item.children.length &&
           item.children.forEach((child) => {
-            child.static = !child.static;
-            child.isResizable = child.isSize;
+            child.static = !item.static;
+            child.isResizable = !item.static ? false : child.isSize;
           });
       }
     });
@@ -383,7 +396,8 @@ export default class Content extends Component {
   };
 
   // 模块删除
-  handleDelete = ({ i, children }) => {
+  handleDelete = (e, { i, children }) => {
+    e.stopPropagation();
     if (children && !!children.length) {
       message.error('请先删除分组的子级').then((r) => r);
       return;
@@ -442,7 +456,12 @@ export default class Content extends Component {
   // 新增分组
   handleAddGroup = (item) => {
     const { layout, mirrorLayout } = this.state;
-    const group = { i: new Date().getTime().toString(), ...item };
+    const group = {
+      i: new Date().getTime().toString(),
+      ...item,
+      minW: 4,
+      minH: 4,
+    };
     layout.push(group);
     mirrorLayout.push(group);
     this.setState({ layout, mirrorLayout });

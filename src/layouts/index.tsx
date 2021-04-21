@@ -141,7 +141,7 @@ class Index extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    localStorage.clear();
+    // localStorage.clear();
   }
 
   // 显示|隐藏侧边菜单

@@ -130,7 +130,7 @@ export default {
     },
     // 获取当前一级菜单下的二级和三级菜单
     getSubMenu: (
-      { menuData, filterMenuData },
+      { menuData, filterMenuData, curFatherKeys, curSonKeys, curGrandsonKeys },
       { payload: { id: curFatherId } },
     ) => {
       const curFather =
@@ -139,9 +139,9 @@ export default {
         menuData,
         filterMenuData,
         subMenus: curFather ? curFather.children : [],
-        curFatherKeys: [],
-        curSonKeys: [],
-        curGrandsonKeys: [],
+        curFatherKeys: [curFatherId],
+        curSonKeys,
+        curGrandsonKeys,
       };
     },
     // 点击二级菜单的action

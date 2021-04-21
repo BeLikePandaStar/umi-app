@@ -20,4 +20,5 @@
 /.env.local
 
 # idea
+./idea
 ./idea/workspace.xml
