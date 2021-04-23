@@ -7,15 +7,16 @@ export const getBarOption = () => {
         ['c', 3],
         ['d', 4],
         ['e', 5],
-      ]
+      ],
     },
     xAxis: {
       type: 'category',
-
     },
     yAxis: {},
-    series: [{
-      type: 'bar'
-    }]
-  }
-}
+    series: [
+      {
+        type: 'bar',
+      },
+    ],
+  };
+};

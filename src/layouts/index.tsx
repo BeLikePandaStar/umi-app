@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect, history } from 'umi';
+import { connect } from 'umi';
 import { Layout, Menu, Button } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Link } from 'umi';

@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
+
 import { List } from 'antd';
 import style from './list.css';
 
 const ListItem = List.Item;
 
+interface ListData {
+  title: string;
+  list: string[];
+}
+
+interface Props {
+  data: ListData;
+}
+
+interface State {}
+
 // 列表组件
-export default class ListComponent extends Component {
+export default class ListComponent extends Component<Props, State> {
   render() {
     const { data } = this.props;
     return (

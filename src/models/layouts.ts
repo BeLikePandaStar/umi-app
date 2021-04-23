@@ -1,4 +1,61 @@
 import commonRequest from '../tools/commonRequest';
+import { Effect, Reducer, Subscription } from 'umi';
+
+interface GrandSon {
+  id: string;
+  order: number;
+  name: string;
+  url: string;
+}
+
+interface Son {
+  id: string;
+  order: number;
+  name: string;
+  url: string;
+  children?: GrandSon[];
+}
+
+interface Father {
+  id: string;
+  order: number;
+  name: string;
+  url: string;
+  children?: Son[];
+}
+
+interface FilterMenu {
+  fatherId: string;
+  sonId: string;
+  grandsonId: string;
+  url: string;
+}
+
+interface LayoutsModelState {
+  menuData: [];
+  filterMenuData: [];
+  subMenus: [];
+  curFatherKeys: [];
+  curSonKeys: [];
+  curGrandsonKeys: [];
+}
+
+interface LayoutsModel {
+  namespace: string;
+  state: LayoutsModelState;
+  effects: {
+    getMenuList: Effect;
+  };
+  reducers: {
+    save: Reducer;
+    getSubMenu: Reducer;
+    openSubMenu: Reducer;
+    onChange: Reducer;
+  };
+  subscriptions: {
+    onRouterChange: Subscription;
+  };
+}
 
 /**
  * 请求菜单
@@ -37,9 +94,11 @@ const get_menu_list = (params = {}) => {
       children: [{ id: '210', order: 1, name: '另一个页面', url: '/another' }],
     },
   ];
-  return commonRequest('', params, 'get', menuData).then((res) => {
+  return commonRequest('', params, 'get', menuData).then((res: any) => {
     if (res.ret === 0) {
       return res.data;
+    } else {
+      return [];
     }
   });
 };
@@ -50,8 +109,8 @@ const get_menu_list = (params = {}) => {
  * @param data
  * @returns {[]}
  */
-function filterMenu(data) {
-  let menus = [];
+function filterMenu(data: Father[]) {
+  let menus: FilterMenu[] = [];
   if (data && data.length) {
     data.forEach((father) => {
       if (father.children) {
@@ -87,8 +146,8 @@ function filterMenu(data) {
   return menus;
 }
 
-export default {
-  name: 'layouts',
+const layoutModel: LayoutsModel = {
+  namespace: 'layouts',
   state: {
     menuData: [],
     filterMenuData: [],
@@ -134,7 +193,8 @@ export default {
       { payload: { id: curFatherId } },
     ) => {
       const curFather =
-        menuData.filter((father) => father.id === curFatherId)[0] || null;
+        menuData.filter((father: Father) => father.id === curFatherId)[0] ||
+        null;
       return {
         menuData,
         filterMenuData,
@@ -156,7 +216,9 @@ export default {
       } = state;
       let newCurSonKeys = curSonKeys;
       if (curSonKeys.includes(curSonId)) {
-        newCurSonKeys = newCurSonKeys.filter((item) => item !== curSonId);
+        newCurSonKeys = newCurSonKeys.filter(
+          (item: string) => item !== curSonId,
+        );
       } else {
         newCurSonKeys.push(curSonId);
       }
@@ -171,9 +233,11 @@ export default {
     },
     // 当路由发生变化时触发的action
     onChange: (state, { payload: { curPath, menuData, filterMenuData } }) => {
-      const keys = filterMenuData.filter((item) => item.url === curPath);
+      const keys = filterMenuData.filter(
+        (item: FilterMenu) => item.url === curPath,
+      );
       const fatherMenu = keys.length
-        ? menuData.filter((item) => item.id === keys[0]['fatherId'])
+        ? menuData.filter((item: Father) => item.id === keys[0]['fatherId'])
         : [];
       return {
         menuData,
@@ -191,7 +255,7 @@ export default {
       return history.listen(({ pathname }) => {
         // 如果菜单有缓存的话就取缓存的菜单
         const menuObj = localStorage.getItem('menuObj')
-          ? JSON.parse(localStorage.getItem('menuObj'))
+          ? JSON.parse(localStorage.getItem('menuObj')!)
           : null;
         if (menuObj) {
           dispatch({
@@ -205,3 +269,5 @@ export default {
     },
   },
 };
+
+export default layoutModel;

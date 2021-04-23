@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent, ReactElement } from 'react';
 import style from './index.css';
 import { Button, message, Tooltip } from 'antd';
 import { CloseOutlined, SwapOutlined } from '@ant-design/icons';
 import GridLayout from 'react-grid-layout';
 import { Chart, getBarOption } from '../index';
-import { ListComponent, TextComponent, LinkComponent } from '../goods/index';
+import { ListComponent, TextComponent, LinkComponent } from '../goods';
 
 const siderWidth = Number(localStorage.getItem('siderWidth'));
 const topBarHeight = 64;
@@ -13,8 +13,55 @@ const originalMirrorLayout = getFromLS('mirrorLayout') || [];
 const contentWidth = document.documentElement.offsetWidth - siderWidth;
 const rowHeight = contentWidth / 30;
 
-export default class Content extends Component {
-  constructor(props) {
+interface GoodsItemDataList {
+  id: string;
+  name: string;
+  gender: string;
+  age: string;
+}
+
+interface GoodsItemDataObj {
+  title: string;
+  list?: string[];
+  content?: string;
+  url?: string;
+  imgSrc?: string;
+}
+
+export interface LayoutChild {
+  i: string;
+  w: number;
+  minW: number;
+  maxW: number;
+  h: number;
+  minH: number;
+  maxH: number;
+  x: number;
+  y: number;
+  static: boolean;
+  isResizable?: boolean;
+  isSize: boolean;
+  type?: string;
+  data: GoodsItemDataObj | string[] | GoodsItemDataList[] | string[][];
+}
+
+export interface Layout extends LayoutChild {
+  title?: string;
+  children?: LayoutChild[];
+}
+
+interface Props {
+  isEdit: boolean;
+}
+
+interface State {
+  layout: Layout[];
+  mirrorLayout: Layout[];
+  currentChild: LayoutChild | {};
+}
+
+export default class Content extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       layout: originalLayout,
@@ -35,7 +82,6 @@ export default class Content extends Component {
         isDroppable={isEdit}
         onLayoutChange={this.onLayoutChange}
         onDrop={this.onDrop}
-        measureBeforeMount={false}
         useCSSTransforms={true}
         compactType={'vertical'}
         cols={30}
@@ -96,7 +142,11 @@ export default class Content extends Component {
   };
 
   // 根据不同的type生成不同的dom
-  getDom = (item, layout, children) => {
+  getDom = (
+    item: Layout,
+    layout: LayoutChild[] | undefined,
+    children: ReactElement[] | undefined,
+  ) => {
     const { isEdit } = this.props;
     switch (item.type) {
       case 'group':
@@ -130,13 +180,14 @@ export default class Content extends Component {
               className={style['grid-layout--group']}
               layout={layout}
               isDroppable={isEdit}
-              onDrop={(layoutList, dropItem, e) =>
-                this.onGroupDrop(layoutList, dropItem, e, item.i)
-              }
-              onLayoutChange={(layout) =>
+              onDrop={(
+                layoutList: LayoutChild[],
+                dropItem: LayoutChild,
+                e: DragEvent,
+              ) => this.onGroupDrop(layoutList, dropItem, e, item.i)}
+              onLayoutChange={(layout: LayoutChild[]) =>
                 this.onGroupLayoutChange(layout, item.i)
               }
-              measureBeforeMount={false}
               useCSSTransforms={true}
               compactType={'vertical'}
               width={rowHeight * item.w}
@@ -155,10 +206,13 @@ export default class Content extends Component {
           </div>
         );
       case 'list':
+        // @ts-ignore
         return <ListComponent data={item.data} />;
       case 'text':
+        // @ts-ignore
         return <TextComponent data={item.data} />;
       case 'link':
+        // @ts-ignore
         return <LinkComponent data={item.data} />;
       case 'bar':
         const option = getBarOption();
@@ -169,7 +223,7 @@ export default class Content extends Component {
   };
 
   // 获取childDom
-  getChildDom = (item, father) => {
+  getChildDom = (item: LayoutChild, father: Layout) => {
     const { isEdit } = this.props;
     let dom;
     switch (item.type) {
@@ -214,7 +268,7 @@ export default class Content extends Component {
   };
 
   // 外部元素拖拽进group事件
-  onDomMouseUp = (e, child) => {
+  onDomMouseUp = (e: MouseEvent, child: LayoutChild) => {
     const { mirrorLayout } = this.state;
     const groups = mirrorLayout.filter((item) => item.type === 'group');
     if (!!groups.length) {
@@ -246,11 +300,10 @@ export default class Content extends Component {
           const newLayout = layout.filter((dom) => dom.i !== child.i);
           newMirrorLayout.forEach((group) => {
             if (group.i === item.i) {
-              group.children.push({
+              group.children!.push({
                 ...child,
                 x: childX,
                 y: childY,
-                isChild: true,
                 static: !group.static,
               });
             }
@@ -262,7 +315,7 @@ export default class Content extends Component {
   };
 
   // group内部元素往外拖的down事件
-  onChildMouseDown = (e, item, father) => {
+  onChildMouseDown = (e: MouseEvent, item: LayoutChild, father: Layout) => {
     const xMin = siderWidth + 10 + father.x * rowHeight + 5,
       xMax = xMin + father.w * rowHeight - 10;
     const yMin = topBarHeight + 10 + father.y * rowHeight + 5,
@@ -309,7 +362,7 @@ export default class Content extends Component {
 
   // group内部元素往外拖拽事件
   // ps:内部元素无法直接移出group,需要一个色块做承接;
-  onSubMouseUp = (e, father) => {
+  onSubMouseUp = (e: MouseEvent, father: Layout) => {
     document.onmousemove = null;
     const sub = document.getElementById('substitute-' + father.i) || {
       style: { display: 'none' },
@@ -320,27 +373,30 @@ export default class Content extends Component {
     const y = Math.max(0, Math.floor((e.clientY - 64) / rowHeight) - 1);
     mirrorLayout.forEach((item, index) => {
       if (item.i === father.i) {
-        mirrorLayout[index].children = mirrorLayout[index].children.filter(
-          (child) => child.i !== currentChild.i,
-        );
+        if ('i' in currentChild) {
+          mirrorLayout[index].children = mirrorLayout[index].children!.filter(
+            (child) => child.i !== currentChild.i,
+          );
+        }
       }
     });
+    // @ts-ignore
     layout.push({ ...currentChild, x, y });
+    // @ts-ignore
     mirrorLayout.push({ ...currentChild, x, y });
     this.setState({ layout, mirrorLayout, currentChild: {} });
   };
 
   // 切换group及其子级的static值
-  onGroupStaticChange = (fatherI) => {
+  onGroupStaticChange = (fatherI: string) => {
     const { layout, mirrorLayout } = this.state;
     mirrorLayout.forEach((item, index) => {
       if (item.i === fatherI) {
         layout[index].static = !item.static;
         item.static = !item.static;
-        !!item.children.length &&
-          item.children.forEach((child) => {
+        item.children!.length &&
+          item.children!.forEach((child) => {
             child.static = !item.static;
-            child.isResizable = !item.static ? false : child.isSize;
           });
       }
     });
@@ -350,8 +406,13 @@ export default class Content extends Component {
   };
 
   // group的drop事件
-  onGroupDrop = (layoutList, dropItem, e, i) => {
-    const params = JSON.parse(e.dataTransfer.getData('text'));
+  onGroupDrop = (
+    layoutList: LayoutChild[],
+    dropItem: LayoutChild,
+    e: DragEvent,
+    i: string,
+  ) => {
+    const params = JSON.parse(e.dataTransfer!.getData('text'));
     const { layout, mirrorLayout } = this.state;
     const newOne = {
       ...params,
@@ -359,11 +420,10 @@ export default class Content extends Component {
       y: dropItem.y,
       static: false,
       isResizable: params.isSize,
-      isChild: true,
     };
     mirrorLayout.forEach((item) => {
       if (item.i === i) {
-        item.children.push({ ...newOne, static: !item.static });
+        item.children!.push({ ...newOne, static: !item.static });
       }
     });
     this.setState({ mirrorLayout }, () => {
@@ -375,14 +435,14 @@ export default class Content extends Component {
   };
 
   // group的layout发生变化
-  onGroupLayoutChange = (newLayout, groupI) => {
+  onGroupLayoutChange = (newLayout: LayoutChild[], groupI: string) => {
     const { mirrorLayout } = this.state;
     mirrorLayout.forEach((item) => {
       if (item.i === groupI) {
-        !!item.children.length &&
-          item.children.forEach((lay, index) => {
+        item.children!.length &&
+          item.children!.forEach((lay, index) => {
             const cur = newLayout[index];
-            item.children[index] = {
+            item.children![index] = {
               ...lay,
               w: cur['w'],
               h: cur['h'],
@@ -396,8 +456,9 @@ export default class Content extends Component {
   };
 
   // 模块删除
-  handleDelete = (e, { i, children }) => {
+  handleDelete = (e: MouseEvent, item: Layout) => {
     e.stopPropagation();
+    const { i, children } = item;
     if (children && !!children.length) {
       message.error('请先删除分组的子级').then((r) => r);
       return;
@@ -409,19 +470,19 @@ export default class Content extends Component {
   };
 
   // 分组内的元素删除
-  handleChildDelete = (childI, fatherI) => {
+  handleChildDelete = (childI: string, fatherI: string) => {
     const { mirrorLayout } = this.state;
     mirrorLayout.forEach((item) => {
       if (item.i === fatherI) {
-        item.children = item.children.filter((child) => child.i !== childI);
+        item.children = item.children!.filter((child) => child.i !== childI);
       }
     });
     this.setState({ mirrorLayout });
   };
 
   // 拖拽放下时触发
-  onDrop = (layoutList, item, e) => {
-    const params = JSON.parse(e.dataTransfer.getData('text'));
+  onDrop = (layoutList: LayoutChild[], item: LayoutChild, e: DragEvent) => {
+    const params = JSON.parse(e.dataTransfer!.getData('text'));
     const { layout, mirrorLayout } = this.state;
     const newOne = {
       ...params,
@@ -436,7 +497,7 @@ export default class Content extends Component {
   };
 
   // 页面布局发生改变时触发
-  onLayoutChange = (layout) => {
+  onLayoutChange = (layout: Layout[]) => {
     const lay = layout.filter((item) => item.i !== '__dropping-elem__');
     const { mirrorLayout } = this.state;
     if (lay.length) {
@@ -454,30 +515,22 @@ export default class Content extends Component {
   };
 
   // 新增分组
-  handleAddGroup = (item) => {
+  handleAddGroup = (item: Layout) => {
     const { layout, mirrorLayout } = this.state;
-    const group = {
-      i: new Date().getTime().toString(),
-      ...item,
-      minW: 4,
-      minH: 4,
-    };
-    layout.push(group);
-    mirrorLayout.push(group);
+    layout.push(item);
+    mirrorLayout.push(item);
     this.setState({ layout, mirrorLayout });
   };
 
-  handleSetState = (status) => {
+  // 点击取消、返回以及保存的事件
+  handleSetState = (status: string) => {
     if (status === 'cancel') {
       this.setState({
         layout: getFromLS('layout'),
         mirrorLayout: getFromLS('mirrorLayout'),
       });
     } else {
-      const { layout, mirrorLayout } = this.state;
-      const newLayout = this.changeLayoutStatic(layout, status === 'edit');
-      const newMirrorLayout = this.changeLayoutStatic(
-        mirrorLayout,
+      const { newLayout, newMirrorLayout } = this.changeLayoutStatic(
         status === 'edit',
       );
       this.setState({ layout: [], mirrorLayout: [] }, () => {
@@ -494,10 +547,13 @@ export default class Content extends Component {
   };
 
   // 将layout转成静态/动态
-  changeLayoutStatic = (list, isEdit) => {
-    list.forEach((item) => {
+  changeLayoutStatic = (isEdit: boolean) => {
+    const { layout, mirrorLayout } = this.state;
+    mirrorLayout.forEach((item, index) => {
       item.static = !isEdit;
+      layout[index].static = !isEdit;
       item.isResizable = isEdit ? item.isSize : false;
+      layout[index].isResizable = isEdit ? item.isSize : false;
       if (item.children && item.children.length && !isEdit) {
         item.children.forEach((child) => {
           child.static = true;
@@ -505,12 +561,12 @@ export default class Content extends Component {
         });
       }
     });
-    return list;
+    return { newLayout: layout, newMirrorLayout: mirrorLayout };
   };
 }
 
 // 从localstorage中取出布局
-function getFromLS(key) {
+function getFromLS(key: string) {
   if (global.localStorage) {
     const item = global.localStorage.getItem(key);
     return item ? JSON.parse(item) : null;
@@ -520,7 +576,7 @@ function getFromLS(key) {
 }
 
 // 将布局存入localstorage
-function setFormLS(key, value) {
+function setFormLS(key: string, value: Layout[]) {
   if (global.localStorage) {
     global.localStorage.setItem(key, JSON.stringify(value));
   }

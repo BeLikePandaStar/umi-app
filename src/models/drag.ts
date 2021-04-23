@@ -1,4 +1,56 @@
 import commonRequest from '../tools/commonRequest';
+import { Effect, Reducer } from 'umi';
+
+interface GoodsItemDataList {
+  id: string;
+  name: string;
+  gender: string;
+  age: string;
+}
+
+interface GoodsItemDataObj {
+  title: string;
+  list?: string[];
+  content?: string;
+  url?: string;
+  imgSrc?: string;
+}
+
+interface GoodsItem {
+  id: string;
+  title: string;
+  templateTypeCode: string;
+  templateConfig: string;
+  thumbnail: string;
+  data: GoodsItemDataObj | string[] | GoodsItemDataList[] | string[][];
+}
+
+interface DataItem {
+  id: string;
+  title: string;
+  children: GoodsItem[];
+}
+
+interface Option {
+  label: string;
+  value: string;
+}
+
+export interface DragModelState {
+  data: DataItem[];
+  options: Option[];
+}
+
+export interface DragModel {
+  namespace: string;
+  state: DragModelState;
+  effects: {
+    getStoreList: Effect;
+  };
+  reducers: {
+    setStoreList: Reducer;
+  };
+}
 
 // 获取商店列表数据
 const get_store_list = (params = {}) => {
@@ -157,7 +209,7 @@ const get_store_list = (params = {}) => {
     },
   ];
   return commonRequest('', params, 'get', data)
-    .then((res) => {
+    .then((res: any) => {
       if (Number(res.ret) === 0) {
         return res.data;
       } else {
@@ -169,7 +221,7 @@ const get_store_list = (params = {}) => {
     });
 };
 
-export default {
+const dragModel: DragModel = {
   namespace: 'drag',
   state: {
     data: [],
@@ -178,7 +230,7 @@ export default {
   effects: {
     *getStoreList({ payload }, { call, put }) {
       const data = yield call(get_store_list, payload);
-      const options = data.map((item) => ({
+      const options = data.map((item: DataItem) => ({
         label: item.title,
         value: item.id,
       }));
@@ -194,3 +246,5 @@ export default {
     },
   },
 };
+
+export default dragModel;

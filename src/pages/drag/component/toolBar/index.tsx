@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'umi';
+import React, { Component, DragEvent } from 'react';
+import { connect, DragModelState, Dispatch } from 'umi';
 import style from './index.css';
 import { Select, Input, Button, Collapse } from 'antd';
 import {
@@ -8,11 +8,23 @@ import {
   LeftOutlined,
   RightOutlined,
 } from '@ant-design/icons';
+import { LayoutChild } from '../content';
 
 const { Panel } = Collapse;
 
+interface Props {
+  handleShopToggle: (isShow: boolean) => void;
+  isShow: boolean;
+  isEdit: boolean;
+  options: DragModelState['options'];
+  getStoreList: (payload: {}) => void;
+  data: DragModelState['data'];
+}
+
+interface State {}
+
 // 右侧工具条
-class ToolBar extends Component {
+class ToolBar extends Component<Props, State> {
   render() {
     const { handleShopToggle, isShow, isEdit, options } = this.props;
     return (
@@ -79,15 +91,19 @@ class ToolBar extends Component {
                     key={child.id}
                     className={style['goodsItem']}
                     draggable={true}
-                    onDragStart={(e) =>
+                    onDragStart={(e: DragEvent) =>
                       this.onDragStart(e, {
+                        i: new Date().getTime().toString(),
                         w: minW,
                         h: minH,
                         minW,
                         maxW,
                         minH,
                         maxH,
+                        x: 0,
+                        y: 0,
                         isSize,
+                        static: false,
                         type: child.templateTypeCode,
                         data: child.data,
                       })
@@ -109,22 +125,21 @@ class ToolBar extends Component {
   };
 
   // model
-  onDragStart = (e, params) => {
-    e.currentTarget.style.border = '2px dashed rgb(240, 194, 199)';
-    const i = new Date().getTime().toString();
-    e.dataTransfer.setData('text/plain', JSON.stringify({ i, ...params }));
+  onDragStart = (e: DragEvent, params: LayoutChild) => {
+    // e.currentTarget.style.border = '2px dashed rgb(240, 194, 199)';
+    e.dataTransfer!.setData('text/plain', JSON.stringify(params));
   };
 
-  onDragEnd = (e) => {
-    e.currentTarget.style.border = 'none';
+  onDragEnd = (e: DragEvent) => {
+    // e.currentTarget.style.border = 'none';
   };
 }
 
-const mapStateToProps = ({ drag }) => drag;
+const mapStateToProps = ({ drag }: { drag: DragModelState }) => drag;
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    getStoreList: (payload) => {
+    getStoreList: (payload: any) => {
       dispatch({ type: 'drag/getStoreList', payload });
     },
   };
