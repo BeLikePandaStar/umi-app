@@ -67,8 +67,8 @@ const get_menu_list = (params = {}) => {
     {
       id: '100',
       order: 1,
-      name: '自定义一级菜单',
-      url: '/father1',
+      name: '菜单一',
+      url: '/one',
       children: [
         {
           id: '110',
@@ -89,8 +89,8 @@ const get_menu_list = (params = {}) => {
     {
       id: '200',
       order: 2,
-      name: '自定义一级菜单2',
-      url: '/father2',
+      name: '菜单二',
+      url: '/two',
       children: [{ id: '210', order: 1, name: '另一个页面', url: '/another' }],
     },
   ];

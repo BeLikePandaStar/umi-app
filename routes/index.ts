@@ -2,9 +2,11 @@
  * 路由配置
  */
 export default [
+  { path: '/', title: '首页', exact: true, component: '@/pages/index' },
+  { path: '/login', title: '登录', exact: true, component: '@/pages/login' },
   {
-    path: '/',
-    title: '首页',
+    path: '/one',
+    title: '菜单一',
     exact: false,
     component: '@/layouts/index',
     routes: [

@@ -42,6 +42,7 @@ class Index extends Component<Props, State> {
       getSubMenu,
       openSubMenu,
     } = this.props;
+    console.log('menuData:', menuData);
     const { sideMenuHidden } = this.state;
     return (
       <Layout className={'wrap'}>

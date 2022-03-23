@@ -172,7 +172,7 @@ export default class ActionArea extends Component<Props, State> {
         minW: 4,
         minH: 4,
         x: 0,
-        y: 100,
+        y: 1000,
         type: 'group',
         children: [],
       });

@@ -193,7 +193,7 @@ export default class Content extends Component<Props, State> {
               width={rowHeight * item.w}
               cols={item.w}
               margin={[0, 0]}
-              containerPadding={[10, 10]}
+              containerPadding={[0, 0]}
               rowHeight={rowHeight}
             >
               {children}
@@ -384,7 +384,9 @@ export default class Content extends Component<Props, State> {
     layout.push({ ...currentChild, x, y });
     // @ts-ignore
     mirrorLayout.push({ ...currentChild, x, y });
-    this.setState({ layout, mirrorLayout, currentChild: {} });
+    this.setState({ layout: [], mirrorLayout: [], currentChild: {} }, () => {
+      this.setState({ layout, mirrorLayout });
+    });
   };
 
   // 切换group及其子级的static值
@@ -397,6 +399,7 @@ export default class Content extends Component<Props, State> {
         item.children!.length &&
           item.children!.forEach((child) => {
             child.static = !item.static;
+            child.isResizable = !item.static ? false : child.isSize;
           });
       }
     });
@@ -519,7 +522,9 @@ export default class Content extends Component<Props, State> {
     const { layout, mirrorLayout } = this.state;
     layout.push(item);
     mirrorLayout.push(item);
-    this.setState({ layout, mirrorLayout });
+    this.setState({ layout: [], mirrorLayout: [] }, () => {
+      this.setState({ layout, mirrorLayout });
+    });
   };
 
   // 点击取消、返回以及保存的事件
