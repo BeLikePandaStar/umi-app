@@ -6,7 +6,7 @@ export default defineConfig({
     type: 'none',
   },
   hash: true,
-  history: { type: 'hash' },
+  history: { type: 'browser' },
   routes,
   fastRefresh: {},
   devServer: {

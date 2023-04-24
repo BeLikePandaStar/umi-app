@@ -1,5 +1,4 @@
-import commonRequest from '../tools/commonRequest';
-import { Effect, Reducer, Subscription } from 'umi';
+import { Effect, Reducer, Subscription } from "umi";
 
 interface GrandSon {
   id: string;
@@ -63,44 +62,37 @@ interface LayoutsModel {
  * @returns {Promise<*>}
  */
 const get_menu_list = (params = {}) => {
-  const menuData = [
+  return [
     {
-      id: '100',
+      id: "100",
       order: 1,
-      name: '菜单一',
-      url: '/one',
+      name: "菜单一",
+      url: "/one",
       children: [
         {
-          id: '110',
+          id: "110",
           order: 1,
-          name: '拖拽模块',
-          url: '/son1',
-          children: [{ id: '111', order: 1, name: '拖拽', url: '/drag' }],
+          name: "拖拽模块",
+          url: "/son1",
+          children: [{ id: "111", order: 1, name: "拖拽", url: "/drag" }]
         },
         {
-          id: '120',
+          id: "120",
           order: 2,
-          name: '动态表单模块',
-          url: '/son2',
-          children: [{ id: '121', order: 1, name: '动态表单', url: '/form' }],
-        },
-      ],
+          name: "动态表单模块",
+          url: "/son2",
+          children: [{ id: "121", order: 1, name: "动态表单", url: "/form" }]
+        }
+      ]
     },
     {
-      id: '200',
+      id: "200",
       order: 2,
-      name: '菜单二',
-      url: '/two',
-      children: [{ id: '210', order: 1, name: '另一个页面', url: '/another' }],
-    },
-  ];
-  return commonRequest('', params, 'get', menuData).then((res: any) => {
-    if (res.ret === 0) {
-      return res.data;
-    } else {
-      return [];
+      name: "菜单二",
+      url: "/two",
+      children: [{ id: "210", order: 1, name: "另一个页面", url: "/another" }]
     }
-  });
+  ];
 };
 
 /**
@@ -121,24 +113,24 @@ function filterMenu(data: Father[]) {
                 fatherId: father.id,
                 sonId: son.id,
                 grandsonId: grandson.id,
-                url: grandson.url,
+                url: grandson.url
               });
             });
           } else {
             menus.push({
               fatherId: father.id,
               sonId: son.id,
-              grandsonId: '',
-              url: son.url,
+              grandsonId: "",
+              url: son.url
             });
           }
         });
       } else {
         menus.push({
           fatherId: father.id,
-          sonId: '',
-          grandsonId: '',
-          url: father.url,
+          sonId: "",
+          grandsonId: "",
+          url: father.url
         });
       }
     });
@@ -147,50 +139,50 @@ function filterMenu(data: Father[]) {
 }
 
 const layoutModel: LayoutsModel = {
-  namespace: 'layouts',
+  namespace: "layouts",
   state: {
     menuData: [],
     filterMenuData: [],
     subMenus: [],
     curFatherKeys: [],
     curSonKeys: [],
-    curGrandsonKeys: [],
+    curGrandsonKeys: []
   },
   effects: {
-    *getMenuList({ payload }, { call, put }) {
+    * getMenuList({ payload }, { call, put }) {
       const menuData = yield call(get_menu_list, payload);
       yield put({
-        type: 'save',
-        payload: { menuData, filterMenuData: filterMenu(menuData) },
+        type: "save",
+        payload: { menuData, filterMenuData: filterMenu(menuData) }
       });
-    },
+    }
   },
   reducers: {
     // 初始化菜单
     save: (state, { payload: { menuData, filterMenuData } }) => {
       // 请求到的菜单缓存起来
       localStorage.setItem(
-        'menuObj',
-        JSON.stringify({ menuData, filterMenuData }),
+        "menuObj",
+        JSON.stringify({ menuData, filterMenuData })
       );
       const curFather = menuData && menuData.length ? menuData[0] : null;
       const curSon =
-        curFather && curFather.children ? curFather['children'][0] : null;
+        curFather && curFather.children ? curFather["children"][0] : null;
       const curGrandson =
-        curSon && curSon.children ? curSon['children'][0] : null;
+        curSon && curSon.children ? curSon["children"][0] : null;
       return {
         menuData,
         filterMenuData,
-        subMenus: menuData[0]['children'],
-        curFatherKeys: [curFather ? curFather.id : ''],
-        curSonKeys: [curSon ? curSon.id : ''],
-        curGrandsonKeys: [curGrandson ? curGrandson.id : ''],
+        subMenus: menuData[0]["children"],
+        curFatherKeys: [curFather ? curFather.id : ""],
+        curSonKeys: [curSon ? curSon.id : ""],
+        curGrandsonKeys: [curGrandson ? curGrandson.id : ""]
       };
     },
     // 获取当前一级菜单下的二级和三级菜单
     getSubMenu: (
       { menuData, filterMenuData, curFatherKeys, curSonKeys, curGrandsonKeys },
-      { payload: { id: curFatherId } },
+      { payload: { id: curFatherId } }
     ) => {
       const curFather =
         menuData.filter((father: Father) => father.id === curFatherId)[0] ||
@@ -201,7 +193,7 @@ const layoutModel: LayoutsModel = {
         subMenus: curFather ? curFather.children : [],
         curFatherKeys: [curFatherId],
         curSonKeys,
-        curGrandsonKeys,
+        curGrandsonKeys
       };
     },
     // 点击二级菜单的action
@@ -212,12 +204,12 @@ const layoutModel: LayoutsModel = {
         subMenus,
         curFatherKeys,
         curSonKeys,
-        curGrandsonKeys,
+        curGrandsonKeys
       } = state;
       let newCurSonKeys = curSonKeys;
       if (curSonKeys.includes(curSonId)) {
         newCurSonKeys = newCurSonKeys.filter(
-          (item: string) => item !== curSonId,
+          (item: string) => item !== curSonId
         );
       } else {
         newCurSonKeys.push(curSonId);
@@ -228,46 +220,46 @@ const layoutModel: LayoutsModel = {
         subMenus,
         curFatherKeys,
         curSonKeys: newCurSonKeys,
-        curGrandsonKeys,
+        curGrandsonKeys
       };
     },
     // 当路由发生变化时触发的action
     onChange: (state, { payload: { curPath, menuData, filterMenuData } }) => {
       const keys = filterMenuData.filter(
-        (item: FilterMenu) => item.url === curPath,
+        (item: FilterMenu) => item.url === curPath
       );
       const fatherMenu = keys.length
-        ? menuData.filter((item: Father) => item.id === keys[0]['fatherId'])
+        ? menuData.filter((item: Father) => item.id === keys[0]["fatherId"])
         : [];
       return {
         menuData,
         filterMenuData,
-        subMenus: fatherMenu.length ? fatherMenu[0]['children'] : [],
-        curFatherKeys: keys.length ? [keys[0]['fatherId']] : [''],
-        curSonKeys: keys.length ? [keys[0]['sonId']] : [''],
-        curGrandsonKeys: keys.length ? [keys[0]['grandsonId']] : [''],
+        subMenus: fatherMenu.length ? fatherMenu[0]["children"] : [],
+        curFatherKeys: keys.length ? [keys[0]["fatherId"]] : [""],
+        curSonKeys: keys.length ? [keys[0]["sonId"]] : [""],
+        curGrandsonKeys: keys.length ? [keys[0]["grandsonId"]] : [""]
       };
-    },
+    }
   },
   subscriptions: {
     // 监听路由变化,保证菜单显示正确以及路由锁定
     onRouterChange: ({ dispatch, history }) => {
       return history.listen(({ pathname }) => {
         // 如果菜单有缓存的话就取缓存的菜单
-        const menuObj = localStorage.getItem('menuObj')
-          ? JSON.parse(localStorage.getItem('menuObj')!)
+        const menuObj = localStorage.getItem("menuObj")
+          ? JSON.parse(localStorage.getItem("menuObj")!)
           : null;
         if (menuObj) {
           dispatch({
-            type: 'onChange',
-            payload: { curPath: pathname, ...menuObj },
+            type: "onChange",
+            payload: { curPath: pathname, ...menuObj }
           });
         } else {
-          dispatch({ type: 'getMenuList', payload: {} });
+          dispatch({ type: "getMenuList", payload: {} });
         }
       });
-    },
-  },
+    }
+  }
 };
 
 export default layoutModel;

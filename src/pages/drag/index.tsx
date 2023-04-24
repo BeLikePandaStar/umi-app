@@ -1,7 +1,9 @@
 import React, { Component, createRef } from 'react';
-import style from './index.css';
 import { Content, ActionArea, ToolBar } from './component';
 import { Layout } from './component/content';
+// 引入样式
+import styles from './index.less';
+
 
 interface Props {}
 
@@ -25,11 +27,11 @@ export default class Drag extends Component<Props, State> {
   render() {
     const { isEdit, isShopShow } = this.state;
     return (
-      <div className={style['dragPage__content']}>
-        <div className={style['content__left']}>
+      <div className={styles['dragPage__content']}>
+        <div className={styles['content__left']}>
           <Content ref={this.contentEle} isEdit={isEdit} />
         </div>
-        <div className={style['content__right']}>
+        <div className={styles['content__right']}>
           {/*右侧工具栏*/}
           <ToolBar
             isEdit={isEdit}
