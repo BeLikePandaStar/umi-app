@@ -150,7 +150,7 @@ const layoutModel: LayoutsModel = {
   },
   effects: {
     * getMenuList({ payload }, { call, put }) {
-      const menuData = yield call(get_menu_list, payload);
+      const menuData = yield call(get_menu_list, payload) as unknown;
       yield put({
         type: "save",
         payload: { menuData, filterMenuData: filterMenu(menuData) }
